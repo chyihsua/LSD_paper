@@ -3,7 +3,7 @@ import math
 import cv2
 
 def LevelLineAngle(x, y):
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # Convert image to grayscale
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     grad_x = cv2.Sobel(gray, cv2.CV_32F, 1, 0, ksize=5)
     grad_y = cv2.Sobel(gray, cv2.CV_32F, 0, 1, ksize=5)
 
@@ -24,13 +24,10 @@ for i in range(h):
             img[i, j] = (0, 0, 255)
         else:
             img[i, j] = (255, 255, 255)
-        # elif i==h-j:
-        #    img_new[i, j] = (255, 0, 0)
-
-"""
-img = cv2.imread("lsd_test_1.png")
-h,w=img.shape[:2]
-"""
+        '''
+        elif i==h-j:
+            img[i, j] = (255, 0, 0)
+        '''
 
 region = {(w // 2, h // 2)}
 regionAngle = LevelLineAngle(0, 0)
@@ -51,7 +48,7 @@ while n <= max:
                     (x >= 0 and x <= w)
                     and (y >= 0 and y <= h)  # ensure x, y is in the image
                     and
-                    # check if (x, y) is not used
+                    # check if (x, y) is not used by other region(X)
                     LevelLineAngle(x, y) != None
                     and
                     # if Diff(LevelLineAngle(x, y), regionAngle) < tolerance
@@ -63,7 +60,6 @@ while n <= max:
                     sx += math.cos(math.radians(LevelLineAngle(x, y)))
                     sy += math.sin(math.radians(LevelLineAngle(x, y)))
                     regionAngle = math.degrees(math.atan2(sy, sx))
-                    print(x, y)
     n += 1
 
 print(region)
