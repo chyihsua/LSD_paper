@@ -2,6 +2,7 @@ import numpy as np
 import math
 import cv2
 
+
 def LevelLineAngle(x, y):
     gray = cv2.cvtColor(img_new, cv2.COLOR_BGR2GRAY)
     grad_x = cv2.Sobel(gray, cv2.CV_32F, 1, 0, ksize=5)
@@ -11,9 +12,10 @@ def LevelLineAngle(x, y):
         return None
     else:
         angle = math.atan2(grad_y[x, y], grad_x[x, y])
-        with open('LevelLineAngle2.txt', 'a') as f:
-                f.write(f"({x}, {y}): {angle}\n")
+        with open("LevelLineAngle2.txt", "a") as f:
+            f.write(f"({x}, {y}): {angle}\n")
         return angle
+
 
 # create a image
 h, w = 100, 100
@@ -24,41 +26,44 @@ for i in range(h):
             img_new[i, j] = (0, 0, 255)
         else:
             img_new[i, j] = (255, 255, 255)
-        '''
+        """
         elif i==h-j:
             img_new[i, j] = (255, 0, 0)
-        '''
+        """
 
-All_region = {(w//2,h//2):{"status":"unused"}}
+All_region = {(w // 2, h // 2): {"status": "unused"}}
 region = {
-    (w//2,h//2),
+    (w // 2, h // 2),
 }
-regionAngle = LevelLineAngle(0,0)
+regionAngle = LevelLineAngle(0, 0)
 sx = math.cos(math.radians(regionAngle))
 sy = math.sin(math.radians(regionAngle))
 tolerance = math.radians(22.5)
 
-n=0
-while n<=max(h,w):
-    for P in region.copy():    # for each pixel P in region
+n = 0
+while n <= max(h, w):
+    for P in region.copy():  # for each pixel P in region
         # for p bar neighbor of P (8 neighbors)
-        for dx in range(-1,2):
-            for dy in range(-1,2):
+        for dx in range(-1, 2):
+            for dy in range(-1, 2):
                 x = P[0] + dx
                 y = P[1] + dy
-                if ((x >= 0 and x <= w) and #ensure x, y is in the image
-                    (y >= 0 and y <= h) and
-                    #check if (x, y) is not used
-                    #((x, y) not in region or All_region[(x, y)]["status"] == "unused") and  
-                    LevelLineAngle(x, y)!=None and
-                    #if Diff(LevelLineAngle(x, y), regionAngle) < tolerance
+                if (
+                    (x >= 0 and x <= w)
+                    and (y >= 0 and y <= h)  # ensure x, y is in the image
+                    and
+                    # check if (x, y) is not used
+                    # ((x, y) not in region or All_region[(x, y)]["status"] == "unused") and
+                    LevelLineAngle(x, y) != None
+                    and
+                    # if Diff(LevelLineAngle(x, y), regionAngle) < tolerance
                     abs(LevelLineAngle(x, y) - regionAngle) <= tolerance
                 ):
                     region.add((x, y))
                     sx += math.cos(math.radians(LevelLineAngle(x, y)))
                     sy += math.sin(math.radians(LevelLineAngle(x, y)))
                     regionAngle = math.degrees(math.atan2(sy, sx))
-    n+=1
+    n += 1
 
 print(region)
 img = np.zeros((h, w, 3), dtype=np.uint8)

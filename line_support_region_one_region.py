@@ -2,6 +2,7 @@ import numpy as np
 import math
 import cv2
 
+
 def LevelLineAngle(x, y):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     grad_x = cv2.Sobel(gray, cv2.CV_32F, 1, 0, ksize=5)
@@ -15,6 +16,7 @@ def LevelLineAngle(x, y):
             f.write(f"({x}, {y}): {angle}\n")
         return angle
 
+
 # create a image
 h, w = 100, 100
 img = np.zeros((h, w, 3), dtype=np.uint8)
@@ -24,10 +26,10 @@ for i in range(h):
             img[i, j] = (0, 0, 255)
         else:
             img[i, j] = (255, 255, 255)
-        '''
+        """
         elif i==h-j:
             img[i, j] = (255, 0, 0)
-        '''
+        """
 
 region = {(w // 2, h // 2)}
 regionAngle = LevelLineAngle(0, 0)
