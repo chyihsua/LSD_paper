@@ -18,43 +18,40 @@ def LevelLineAngle(x, y):
         return angle
 
 
-def region(x, y):
+def region_grow(x, y):
     StartX, StartY = x, y
     region = [(StartX, StartY)]
     regionAngle = LevelLineAngle(StartX, StartY)
     sx = math.cos(regionAngle)
     sy = math.sin(regionAngle)
     tolerance = 22.5
-    quene = collections.deque()
-    quene.append((StartX, StartY))
+    # quene = collections.deque()
+    # quene.append((StartX, StartY))
 
-    while quene:
-        i, j = quene.popleft()
-
-        # for p bar neighbor of P (8 neighbors)
-        for dx in range(-1, 2):
-            for dy in range(-1, 2):
-                x = i + dx
-                y = j + dy
-                if (
-                    (x >= 0 and x <= w)
-                    and (y >= 0 and y <= h)  # ensure x, y is in the image
-                    and LevelLineAngle(x, y) != None
-                    and
-                    # check if (x, y) is not used by other region
-                    status[x, y] == 0
-                    and (x, y) not in region
-                    and
-                    # if Diff(LevelLineAngle(x, y), regionAngle) < tolerance
-                    abs(LevelLineAngle(x, y) - regionAngle) <= tolerance
-                ):
-                    region.append((i, j))
-                    region.append((x, y))
-                    status[x, y] = 1
-                    quene.append((x, y))
-                    sx += math.cos(LevelLineAngle(x, y))
-                    sy += math.sin(LevelLineAngle(x, y))
-                    regionAngle = math.atan2(sy, sx)
+    # for p bar neighbor of P (8 neighbors)
+    for dx in range(-1, 2):
+        for dy in range(-1, 2):
+            x = StartX + dx
+            y = StartY + dy
+            if (
+                (x >= 0 and x <= w)
+                and (y >= 0 and y <= h)  # ensure x, y is in the image
+                and LevelLineAngle(x, y) != None
+                and
+                # check if (x, y) is not used by other region
+                status[x, y] == 0
+                and
+                # if Diff(LevelLineAngle(x, y), regionAngle) < tolerance
+                abs(LevelLineAngle(x, y) - regionAngle) <= tolerance
+            ):
+                region.append((StartX, StartY))
+                region.append((x, y))
+                sx += math.cos(LevelLineAngle(x, y))
+                sy += math.sin(LevelLineAngle(x, y))
+                regionAngle = math.atan2(sy, sx)
+                StartX, StartY = x, y
+    for i in range(len(region)):
+        status[region[i][0], region[i][1]] = 1
 
 
 img = cv2.imread("lsd_test_4.png")
@@ -65,8 +62,8 @@ for i in range(h):
     for j in range(w):
         if status[i, j] == 0:
             print(i, j)
-            region(i, j)
-            print(region)
+            region_grow(i, j)
+            print(region_grow(i, j))
         else:
             break
 
