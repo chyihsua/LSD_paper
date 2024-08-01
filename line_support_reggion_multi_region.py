@@ -18,22 +18,23 @@ def LevelLineAngle(x, y):
 
 
 # create a image
-h, w = 100, 100
+h, w = 15, 15
 img_new = np.zeros((h, w, 3), dtype=np.uint8)
 for i in range(h):
     for j in range(w):
         if i == j:
             img_new[i, j] = (0, 0, 255)
+        elif i==h-j:
+            img_new[i, j] = (255, 0, 0)    
         else:
             img_new[i, j] = (255, 255, 255)
         """
-        elif i==h-j:
-            img_new[i, j] = (255, 0, 0)
+        
         """
 
 All_region = {(w // 2, h // 2): {"status": "unused"}}
 region = {
-    (w // 2, h // 2),
+    (0,0),
 }
 regionAngle = LevelLineAngle(0, 0)
 sx = math.cos(math.radians(regionAngle))
