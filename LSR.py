@@ -20,19 +20,19 @@ def LevelLineAngle(x, y):
 
 def region_grow(x, y):
     StartX, StartY = x, y
-    region = []
-    region.append((StartX, StartY))
+    region = set()
     regionAngle = LevelLineAngle(StartX, StartY)
     sx = math.cos(regionAngle)
     sy = math.sin(regionAngle)
     tolerance = 22.5
-    # quene = collections.deque()
-    # quene.append((StartX, StartY))
+    quene = collections.deque()
+    quene.append((StartX, StartY))
 
     # for p bar neighbor of P (8 neighbors)
-    n=1
-    while n:
-        n-=1
+    while quene:
+        #print(quene)
+        i,j = quene.popleft()
+        region.add((i,j))
         for dx in range(-1, 2):
             for dy in range(-1, 2):
                 x = StartX + dx
@@ -48,12 +48,11 @@ def region_grow(x, y):
                     # if Diff(LevelLineAngle(x, y), regionAngle) < tolerance
                     abs(LevelLineAngle(x, y) - regionAngle) <= tolerance
                 ):
-                    region.append((x, y))
+                    quene.append((x, y))
                     sx += math.cos(LevelLineAngle(x, y))
                     sy += math.sin(LevelLineAngle(x, y))
                     regionAngle = math.atan2(sy, sx)
                     StartX, StartY = x, y
-                    n+=1
     for i in range(len(region)):
         status[region[i][0], region[i][1]] = 1
 
