@@ -23,7 +23,7 @@ min_x = float('inf')
 min_y = float('inf')
     
 for x, y in region:
-    img_new[x, y] = (255,255,255)
+    #img_new[x, y] = (255,255,255)
     if x > max_x:
         max_x = x
     if y > max_y:
@@ -32,21 +32,6 @@ for x, y in region:
         min_x = x
     if y < min_y:
         min_y = y
-
-#畫出邊緣
-#避免重疊   (條件有等於嗎？)
-if min_x-1>0 and min_x-1<h:
-    min_x-=1
-if max_x+1>0 and max_x+1<h:
-    max_x+=1
-if min_y-1>0 and min_y-1<w:
-    min_y-=1
-if max_y+1>0 and max_y+1<w:
-    max_y+=1
-img_new[min_x,min_y:max_y] = (0,0,255)
-img_new[max_x,min_y:max_y] = (0,0,255)
-img_new[min_x:max_x,min_y] = (0,0,255)
-img_new[min_x:max_x,max_y] = (0,0,255)
 
 orientation = (max_x - min_x) / (max_y - min_y)
 print("orientation",orientation)
@@ -66,15 +51,32 @@ def LevelLineAngle(x, y):
             f.write(f"({x}, {y}): {angle}\n")
         return angle
     
-#計算每一個region內斜率
-tolerance = math.radians(angle)
-print("tolerance",tolerance)
+#計算每一個region
 for x in range(h):
     for y in range(w):
         if abs(LevelLineAngle(x, y) - orientation) > orientation:   
-        #不確定tolerate的值設定標準對不對，不知道要設什麼
+        #不確定t值設定標準對不對，不知道要設什麼
             img_new[x, y] = (0, 255, 0)
-cv2.resize(img_new, (w, h), img)
+
+#畫出邊緣
+#避免重疊   (條件有等於嗎？)
+if min_x-1>0 and min_x-1<h:
+    min_x-=1
+if max_x+1>0 and max_x+1<h:
+    max_x+=1
+if min_y-1>0 and min_y-1<w:
+    min_y-=1
+if max_y+1>0 and max_y+1<w:
+    max_y+=1
+img_new[min_x,min_y:max_y] = (0,0,255)
+img_new[max_x,min_y:max_y] = (0,0,255)
+img_new[min_x:max_x,min_y] = (0,0,255)
+img_new[min_x:max_x,max_y] = (0,0,255)
+
+for x, y in region:
+    img_new[x, y] = (255,255,255)
+
+img_new = cv2.resize(img_new, (w*15, h*15))
 cv2.imshow("img", img_new)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
