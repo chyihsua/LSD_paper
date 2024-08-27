@@ -21,18 +21,15 @@ max_x = float('-inf')
 max_y = float('-inf')
 min_x = float('inf')
 min_y = float('inf')
-    
-for x, y in region:
-    #img_new[x, y] = (255,255,255)
-    if x > max_x:
-        max_x = x
-    if y > max_y:
-        max_y = y
-    if x < min_x:
-        min_x = x
-    if y < min_y:
-        min_y = y
 
+#找到region矩形四個邊角的座標    
+for x, y in region:
+    print(max(max_x, x))
+    print(min(max_y, y))
+        
+
+# 以region找出矩形的長寬
+dx=max_x-min_x
 orientation = (max_x - min_x) / (max_y - min_y)
 print("orientation",orientation)
 angle = np.arctan(orientation) * 180 / np.pi
