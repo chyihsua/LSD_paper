@@ -36,7 +36,7 @@ def region_grow(x, y):
                 if (
                     0 <= x < h and 0 <= y < w  
                     and status[x, y] == 0
-                    and (x, y) not in region
+                    and (x, y) not in region    #!!!
                     and LevelLineAngle(x, y) is not None 
                     and abs(LevelLineAngle(x, y) - regionAngle) <= tolerance
                 ):
