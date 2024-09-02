@@ -19,10 +19,14 @@ def region_grow():
     max_y = float('-inf')
     min_x = float('inf')
     min_y = float('inf')
-    global p1=(min_x,min_y)
-    global p2=(min_x,max_y)
-    global p3=(max_x,min_y)
-    global p4=(max_x,max_y)
+    global p1
+    p1=(min_x,min_y)
+    global p2
+    p2=(min_x,max_y)
+    global p3
+    p3=(max_x,min_y)
+    global p4
+    p4=(max_x,max_y)
 
     for x, y in region:
         if x <= p1[0] and y <= p1[1]:
@@ -34,8 +38,10 @@ def region_grow():
         elif x >= p3[0] and y <= p3[1]:
             p3 = (x, y)
 
-    global c1 = int((p1[0] + p3[0]) / 2), int((p1[1] + p3[1]) / 2)
-    global c2 = int((p2[0] + p4[0]) / 2), int((p2[1] + p4[1]) / 2)
+    global c1 
+    c1= int((p1[0] + p3[0]) / 2), int((p1[1] + p3[1]) / 2)
+    global c2
+    c2= int((p2[0] + p4[0]) / 2), int((p2[1] + p4[1]) / 2)
     orientation = (c2[0] - c1[0]) / (c2[1] - c1[1])
     width=math.sqrt((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)
     length=math.sqrt((p1[0]-p3[0])**2+(p1[1]-p3[1])**2)
@@ -76,3 +82,6 @@ region_grow()
 #建立cube
 cmds.polyCube(name='cube1',height=h,width=w,depth=1)
 #cmds.curve(d=1,p=[p1,p2,p4,p3,p1],k=[0,1,2,3,4])
+cv2.imshow("img_new", img_new)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
